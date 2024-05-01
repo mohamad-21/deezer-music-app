@@ -1,9 +1,7 @@
-import { createContext, useContext, useReducer, useState, useEffect } from "react"
+import { createContext, useContext, useReducer, useEffect } from "react"
 import settings from "../settings.js";
 
 const AppContext = createContext();
-
-const initialTheme = localStorage.getItem('theme') || 'dark';
 
 const initialState = {
   musics: [],
@@ -20,8 +18,6 @@ const initialState = {
 }
 
 export const AppContextProvider = ({children}) => {
-
-  const [themeMode, setThemeMode] = useState(initialTheme);
 
   const detectCurrentList = (state) => {
     return  state.isTopChartsPlaying ? state.topCharts : state.musics;
@@ -186,17 +182,9 @@ export const AppContextProvider = ({children}) => {
     }
   }, [state.currentIndex]);
 
-  useEffect(() => {
-    localStorage.setItem('theme', themeMode);
-  }, [themeMode]);
-
-  console.log(state);
-
   return (
     <AppContext.Provider 
       value={{
-        themeMode,
-        setThemeMode,
         dispatch,
         ...state
       }}
