@@ -8,6 +8,7 @@ import config from "../config";
 import { Alert, CircularProgress } from "@mui/material";
 import useFetch from "../hooks/useFetch";
 import SectionHeader from "../components/SectionHeader";
+import Charts from "../components/Charts";
 
 const Search = () => {
 
@@ -43,7 +44,7 @@ const Search = () => {
   }
 
   return (
-    <div className="flex md:flex-row flex-col justify-between gap-10">
+    <div className="flex lg:flex-row flex-col justify-between gap-24">
       <div className="flex-[2]">
         <SectionHeader>
           {musics.length > 0 ? (
@@ -60,7 +61,10 @@ const Search = () => {
           enabledItems={enabledItems}
         />
       </div>
-      <Artists className="flex-1" />
+      <div className="flex flex-col gap-12 flex-1">
+        <Charts />
+        <Artists />
+      </div>
     </div>
   )
 }
