@@ -2,11 +2,12 @@ import SectionHeader from '../components/SectionHeader';
 import SectionTitle from '../components/SectionTitle';
 import Artists from '../components/Artists';
 import { useEffect } from "react";
-import { useAppContext } from "../contexts/AppContext";
+import { useDispatch } from "react-redux";
+import { hidePlayer } from "../app/features/playerSlice";
 
 const TopArtists = () => {
 
-  const { dispatch } = useAppContext();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     document.documentElement.scrollIntoView({
@@ -14,7 +15,7 @@ const TopArtists = () => {
     });
     window.document.title = 'Top Artists';
     return () => {
-      dispatch({type: 'HIDE_PLAYER'});
+      dispatch(hidePlayer());
     }
   }, []);
 

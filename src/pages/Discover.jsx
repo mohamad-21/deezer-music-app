@@ -1,45 +1,45 @@
 import { Alert, CircularProgress, FormControl, InputLabel, MenuItem, Select } from "@mui/material"
 import { genres } from '../constants';
 import { useEffect, useState } from "react";
-import { useAppContext } from "../contexts/AppContext";
-import useFetch from "../hooks/useFetch";
-import config from '../config';
-import 'swiper/css'; 
 import Musics from "../components/Musics";
 import Artists from "../components/Artists";
 import SectionTitle from "../components/SectionTitle";
 import { useNavigate } from "react-router-dom";
 import Charts from "../components/Charts";
 import SectionHeader from "../components/SectionHeader";
+import { useGetSongsByGenreQuery } from "../app/api";
+import { useDispatch, useSelector } from "react-redux";
+import { hidePlayer, setData } from '../app/features/playerSlice';
 
 const Discover = () => {
 
   const [currentGenre, setCurrentGenre] = useState(genres[0].value);
-  const { musics, dispatch, isPlaying, currentMusic, enabledItems } = useAppContext();
-  const { data, isFetching, error } = useFetch(config.base_url + `search?q=${currentGenre}&limit=12`, [currentGenre])
+  const { musics, isPlaying, currentMusic, enabledItems } = useSelector(state => state.player);
+  const dispatch = useDispatch();
+  const { data, isLoading, error } = useGetSongsByGenreQuery({ genre: currentGenre, limited: true });
   const redirect = useNavigate();
-
+  
   useEffect(() => {
     document.documentElement.scrollIntoView({
       behavior: 'smooth'
     });
     window.document.title = 'Discover';
     return () => {
-      dispatch({type: 'HIDE_PLAYER'});
+      // dispatch(hidePlayer());
     }
   }, []);
 
   useEffect(() => {
-    if(data?.data) {
-      dispatch({type: 'SET_DATA', data: data.data})
+    if(data) {
+      dispatch(setData({ data }));
     }
   }, [data]);
 
   useEffect(() => {
-    dispatch({type: 'HIDE_PLAYER'});
+    dispatch(hidePlayer());
   }, [currentGenre]);
   
-  if(isFetching) {
+  if(isLoading) {
     return (
       <div className="text-center">
         <CircularProgress color="info" />

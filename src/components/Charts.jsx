@@ -1,24 +1,26 @@
 import React, { useEffect } from 'react'
-import useFetch from "../hooks/useFetch"
-import config from "../config"
-import { useAppContext } from "../contexts/AppContext";
 import SectionTitle from "./SectionTitle";
 import LinkToPage from "./LinkToPage";
 import SectionHeader from "./SectionHeader";
 import ChartCard from "./ChartCard";
 import { List } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
+import { setTopChartsData } from "../app/features/playerSlice";
+import { useGetTopChartsQuery } from "../app/api";
 
 const Charts = ({limited=true}) => {
 
-  const { data, isFetching } = useFetch(config.base_url + `chart?limit=${limited ? '5' : '50'}`);
+  const { data, isLoading } = useGetTopChartsQuery(limited ? 5 : 50);
 
-  const { dispatch, topCharts, currentMusic, isPlaying, enabledItems } = useAppContext();
+  const { topCharts, currentMusic, isPlaying, enabledItems, isTopChartsPlaying } = useSelector(state => state.player);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if(data) {
-      dispatch({type: 'SET_TOP_CHARTS_DATA', data: data?.tracks?.data});
+      dispatch(setTopChartsData({ data }));
     }
   }, [data]);
+
 
   return (
     <div>
@@ -37,8 +39,9 @@ const Charts = ({limited=true}) => {
             isPlaying={isPlaying}
             dispatch={dispatch}
             enabledItems={enabledItems}
-            isFetching={isFetching}
+            isLoading={isLoading}
             limited={limited}
+            isTopChartsPlaying={isTopChartsPlaying}
           />
         ))}
       </List>

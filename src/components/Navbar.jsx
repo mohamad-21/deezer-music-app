@@ -4,7 +4,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import NavItem from "./NavItem";
 import { Link } from "react-router-dom";
 import MenuIcon from '@mui/icons-material/Menu';
-import { useAppContext } from "../contexts/AppContext";
 
 const Navbar = ({setShowSearchbar, setShowTopbar}) => {
 

@@ -1,7 +1,7 @@
-import { Button, FormControl, IconButton, Input, InputBase, TextField } from "@mui/material"
 import CloseIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
-import { memo, useEffect, useState } from "react";
+import { FormControl, IconButton, Input } from "@mui/material";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Searchbar = ({showSearchbar, setShowSearchbar}) => {

@@ -5,19 +5,20 @@ import ArtistCard from "./ArtistCard"
 import 'swiper/css';
 import SectionTitle from "./SectionTitle"
 import LinkToPage from "./LinkToPage"
-import { useAppContext } from "../contexts/AppContext"
-import useFetch from "../hooks/useFetch"
-import config from "../config"
 import SectionHeader from "./SectionHeader"
 import { List, ListItemButton } from "@mui/material"
+import { useDispatch, useSelector } from "react-redux";
+import { useGetTopArtistsQuery } from '../app/api';
+import { setArtistsData } from "../app/features/playerSlice";
 
 const Artists = ({className='', limited=true}) => {
-  const { musics, dispatch, topArtists } = useAppContext();
-  const { data } = useFetch(config.base_url + `chart?limit=${limited ? '10' : '50'}`);
+  const { topArtists } = useSelector(state => state.player);
+  const { data } = useGetTopArtistsQuery(limited ? 5 : 50);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if(data) {
-      dispatch({type: 'SET_ARTISTS_DATA', data: data?.artists?.data});
+      dispatch(setArtistsData({ data }));
     }
   }, [data]);
 

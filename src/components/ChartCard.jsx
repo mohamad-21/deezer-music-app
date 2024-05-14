@@ -1,15 +1,15 @@
 import { Grow, ListItemButton, Skeleton } from "@mui/material"
 import PlayPause from './PlayPause';
+import { pause, playTopCharts } from "../app/features/playerSlice";
 
-const ChartCard = ({id, title, album: { cover_big }, artist: { name }, currentMusic, isPlaying, dispatch, enabledItems, limited=true, isFetching}) => {
+const ChartCard = ({id, title, album: { cover_big }, artist: { name }, currentMusic, isPlaying, dispatch, enabledItems, limited=true, isLoading, isTopChartsPlaying}) => {
 
   const handleClick = () => {
     if(enabledItems) {
       if(currentMusic.id === id && isPlaying) {
-        dispatch({type: 'PAUSE'});
-        console.log('hello');
+        dispatch(pause());
       } else {
-        dispatch({type: 'PLAY_TOP_CHARTS', id});
+        dispatch(playTopCharts({ id }));
       }
     }
   }
@@ -17,7 +17,7 @@ const ChartCard = ({id, title, album: { cover_big }, artist: { name }, currentMu
   return (
     <>
       <Grow style={{transformOrigin: 'top left'}} in timeout={1000} unmountOnExit >
-        {isFetching ? (
+        {isLoading ? (
           <Skeleton 
             variant="rectangular"
             animation="wave"
@@ -36,7 +36,7 @@ const ChartCard = ({id, title, album: { cover_big }, artist: { name }, currentMu
               gap:4,
             }} 
             style={{
-              opacity: currentMusic?.id ? (currentMusic?.id === id ? 1 : 0.6) : 1
+              opacity: isTopChartsPlaying ? (currentMusic?.id ? (currentMusic?.id === id ? 1 : 0.6) : 1) : 1
             }}
             onClick={handleClick}
           >

@@ -2,11 +2,12 @@ import React, { useEffect } from 'react'
 import SectionHeader from "../components/SectionHeader"
 import SectionTitle from "../components/SectionTitle"
 import Charts from "../components/Charts"
-import { useAppContext } from "../contexts/AppContext"
+import { useDispatch } from "react-redux"
+import { hidePlayer } from '../app/features/playerSlice';
 
 const TopCharts = () => {
 
-  const { dispatch } = useAppContext();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     document.documentElement.scrollIntoView({
@@ -14,7 +15,7 @@ const TopCharts = () => {
     });
     window.document.title = 'Top Charts';
     return () => {
-      dispatch({type: 'HIDE_PLAYER'});
+      dispatch(hidePlayer());
     }
   }, []);
 

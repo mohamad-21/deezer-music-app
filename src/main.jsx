@@ -3,12 +3,14 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { BrowserRouter } from "react-router-dom"
-import { AppContextProvider } from "./contexts/AppContext.jsx"
+import { Provider } from "react-redux"
+import store from "./app/store.js"
+import deezerApi from "./app/api.js"
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <AppContextProvider>
+  <Provider store={store}>
+    <BrowserRouter>
       <App />
-    </AppContextProvider>
-  </BrowserRouter>
+    </BrowserRouter>
+  </Provider>
 )

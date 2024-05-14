@@ -5,6 +5,8 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import settings from "../settings";
 
+import { pause, playMainTracks } from '../app/features/playerSlice';
+
 const MusicCard = ({ id, title, artist, album, isPlaying, currentMusic, dispatch, preview, removable=false, enabledItems}) => {
 
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -21,9 +23,9 @@ const MusicCard = ({ id, title, artist, album, isPlaying, currentMusic, dispatch
   const handleClick = () => {
     if(enabledItems) {
       if(currentMusic.id === id && isPlaying) {
-        dispatch({type: 'PAUSE'});
+        dispatch(pause());
       } else {
-        dispatch({type: 'PLAY_MAIN_TRACKS', id})
+        dispatch(playMainTracks({ id }));
       }
     }
   }

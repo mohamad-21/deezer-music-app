@@ -2,25 +2,26 @@ import React, { useEffect } from 'react'
 import SectionTitle from "../components/SectionTitle"
 import Musics from "../components/Musics"
 import Artists from "../components/Artists";
-import { useAppContext } from "../contexts/AppContext";
 import { useLocation } from "react-router-dom";
-import config from "../config";
 import { Alert, CircularProgress } from "@mui/material";
-import useFetch from "../hooks/useFetch";
 import SectionHeader from "../components/SectionHeader";
 import Charts from "../components/Charts";
+import { useDispatch, useSelector } from "react-redux";
+import { useSearchSongQuery } from "../app/api";
+import { hidePlayer, setData } from "../app/features/playerSlice";
 
 const Search = () => {
 
   const { search } = useLocation();
   const searchTerm = new URLSearchParams(search).get('q');
 
-  const { musics, dispatch, isPlaying, currentMusic, enabledItems } = useAppContext();
-  const { data, isFetching, error } = useFetch(config.base_url + `search?q=${searchTerm}`, [search]);
+  const { musics, isPlaying, currentMusic, enabledItems } = useSelector(state => state.player);
+  const dispatch = useDispatch();
+  const { data, isLoading, isError, error } = useSearchSongQuery(searchTerm);
 
   useEffect(() => {
     if(data) {
-      dispatch({type: 'SET_DATA', data: data.data})
+      dispatch(setData({ data }));
     }
   }, [data]);
   
@@ -29,9 +30,12 @@ const Search = () => {
     document.documentElement.scrollIntoView({
       behavior: 'smooth'
     });
+    return () => {
+      dispatch(hidePlayer());
+    }
   }, [search]);
   
-  if(isFetching) {
+  if(isLoading) {
     return (
       <div className="text-center">
         <CircularProgress color="info" />
@@ -39,7 +43,7 @@ const Search = () => {
     )
   }
 
-  if(error) {
+  if(isError) {
     return <Alert severity="error">{error}</Alert>
   }
 

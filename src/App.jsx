@@ -1,5 +1,4 @@
 import { CssBaseline, Link, ThemeProvider} from "@mui/material"
-import { useAppContext } from "./contexts/AppContext"
 import { MUITheme } from "./theme";
 import Header from "./components/Header";
 import Player from "./components/player/Player";
@@ -11,11 +10,22 @@ import Search from "./pages/Search";
 import Saves from "./pages/Saves";
 import Artist from "./pages/Artist";
 import Footer from "./components/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { loadCurrentMusic } from "./app/features/playerSlice";
+import { useGetArtistByIdQuery } from "./app/api";
 
 function App() {
 
-  const { currentMusic, volume, playMode, isPlaying, showPlayer, dispatch } = useAppContext();
-  
+  const { showPlayer, isPlaying, volume, playMode, currentMusic, currentIndex } = useSelector(state => state.player);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(currentMusic.id) {
+      dispatch(loadCurrentMusic());
+    }
+  }, [currentIndex]);
+
   return (
     <ThemeProvider theme={MUITheme}>
       

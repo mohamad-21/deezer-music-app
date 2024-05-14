@@ -11,6 +11,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { IconButton, Menu, Skeleton, Slider } from "@mui/material";
 import { memo, useEffect, useRef, useState } from "react";
 import settings from "../../settings";
+import { useDispatch } from "react-redux";
+import { changePlayMode, changeVolume, disableItems, enableItems, pause, play, playPrevious, playShuffle, playNext } from "../../app/features/playerSlice";
 
 const playModeOptions = {
   normal: <ArrowForwardIcon />,
@@ -18,7 +20,7 @@ const playModeOptions = {
   shuffle: <ShuffleIcon />, 
 };
 
-const Player = ({currentMusic, dispatch, volume, playMode, isPlaying}) => {
+const Player = ({currentMusic, volume, playMode, isPlaying}) => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [durationText, setDurationText] = useState('0:00');
@@ -26,6 +28,8 @@ const Player = ({currentMusic, dispatch, volume, playMode, isPlaying}) => {
   const [loadedMusic, setLoadedMusic] = useState(false);
   const audioRef = useRef(null);
   const processBarRef = useRef(null);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if(isPlaying) {
@@ -40,25 +44,26 @@ const Player = ({currentMusic, dispatch, volume, playMode, isPlaying}) => {
   }, []);
   
   useEffect(() => {
-    dispatch({type:'CHANGE_PLAY_MODE', playMode})
+    dispatch(changePlayMode({ playMode }))
     settings.player.setPlayMode(playMode);
   }, [playMode]);
 
   useEffect(() => {
     if(isPlaying) {
-      play();
+      playAudio();
     }
   }, [currentMusic]);
 
   const handleLoaded = (e) => {
     setDurationText(getTime(e.target.duration));
     setLoadedMusic(true);
-    dispatch({type: 'ENABLE_ITEMS'});
+    dispatch(enableItems());
   }
 
   const handleAbort = () => {
     setLoadedMusic(false);
-    dispatch({type: 'DISABLE_ITEMS'});
+    setAnchorEl(null);
+    dispatch(disableItems());
   }
   
   const handleUpdating = (e) => {
@@ -73,50 +78,50 @@ const Player = ({currentMusic, dispatch, volume, playMode, isPlaying}) => {
   const handleVolumeChange = (e) => {
     const volume = e.target.value;
     audioRef.current.volume = volume;
-    dispatch({type: 'CHANGE_VOLUME', volume});
+    dispatch(changeVolume({ volume }));
     settings.player.setVolume(volume);
   }
 
   const handleEnded = () => {
     if(playMode === 'normal') {
-      playNext();
+      playNextSong();
     } else if(playMode === 'repeat') {
-      play();
+      playAudio();
     } else {
       shuffle();
     }
   }
 
-  const play = () => {
+  const playAudio = () => {
     audioRef.current.play();
-    dispatch({type:'PLAY'})
+    dispatch(play());
   }
 
-  const pause = () => {
+  const pauseAudio = () => {
     audioRef.current.pause();
-    dispatch({type:'PAUSE'})
+    dispatch(pause());
   }
 
   const handlePausePlay = () => {
-    isPlaying ? pause() : play();
+    isPlaying ? pauseAudio() : playAudio();
   }
 
-  const playPrev = () => {
-    dispatch({type: 'PLAY_PREVIOUS'})
+  const playPrevSong = () => {
+    dispatch(playPrevious())
   }
   
-  const playNext = () => {
-    dispatch({type: 'PLAY_NEXT'});
+  const playNextSong = () => {
+    dispatch(playNext());
   }
   
   const shuffle = () => {
-    dispatch({type: 'PLAY_SHUFFLE'});
+    dispatch(playShuffle());
   }
 
   const togglePlayMode = () => {
-    if(playMode === 'normal') dispatch({type:'CHANGE_PLAY_MODE', playMode: 'repeat'});
-    if(playMode === 'repeat') dispatch({type:'CHANGE_PLAY_MODE', playMode: 'shuffle'});
-    if(playMode === 'shuffle') dispatch({type:'CHANGE_PLAY_MODE', playMode: 'normal'});
+    if(playMode === 'normal') dispatch(changePlayMode({ playMode: 'repeat' }));
+    if(playMode === 'repeat') dispatch(changePlayMode({ playMode: 'shuffle' }));
+    if(playMode === 'shuffle') dispatch(changePlayMode({ playMode: 'normal' }));
   }
 
   const getTime = (time) => {
@@ -167,7 +172,7 @@ const Player = ({currentMusic, dispatch, volume, playMode, isPlaying}) => {
                   {playModeOptions[playMode]}
                 </IconButton>
     
-                <IconButton size="small" onClick={playPrev}>
+                <IconButton size="small" onClick={playPrevSong}>
                   <SkipPreviousIcon />
                 </IconButton>
     
@@ -175,7 +180,7 @@ const Player = ({currentMusic, dispatch, volume, playMode, isPlaying}) => {
                   {isPlaying ? <PauseIcon /> : <PlayArrowIcon />}
                 </IconButton>
     
-                <IconButton size="small" onClick={playNext}>
+                <IconButton size="small" onClick={playNextSong}>
                   <SkipNextIcon />
                 </IconButton>
     

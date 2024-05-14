@@ -1,23 +1,28 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import SectionTitle from "../components/SectionTitle"
-import config from "../config";
 import settings from "../settings"
 import Musics from "../components/Musics";
-import { useAppContext } from "../contexts/AppContext";
+import { useDispatch, useSelector } from "react-redux";
+import { hidePlayer, setData } from "../app/features/playerSlice";
 
 const Saves = () => {
 
   const musics = settings.getLikes();
-  const { dispatch, isPlaying, currentMusic, enabledItems } = useAppContext();
+  const { isPlaying, currentMusic, enabledItems } = useSelector(state => state.player);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if(musics) {
-      dispatch({type: 'SET_DATA', data:musics});
+      dispatch(setData({ data: musics }));
     }
     window.document.title = 'My Saves';
     document.documentElement.scrollIntoView({
       behavior: 'smooth'
     });
+
+    return () => {
+      dispatch(hidePlayer());
+    }
   }, []);
 
   return (
