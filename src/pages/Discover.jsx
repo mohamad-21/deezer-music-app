@@ -18,7 +18,7 @@ const Discover = () => {
   const dispatch = useDispatch();
   const { data, isLoading, error } = useGetSongsByGenreQuery({ genre: currentGenre, limited: true });
   const redirect = useNavigate();
-  
+
   useEffect(() => {
     document.documentElement.scrollIntoView({
       behavior: 'smooth'
@@ -30,7 +30,7 @@ const Discover = () => {
   }, []);
 
   useEffect(() => {
-    if(data) {
+    if (data) {
       dispatch(setData({ data }));
     }
   }, [data]);
@@ -38,8 +38,8 @@ const Discover = () => {
   useEffect(() => {
     dispatch(hidePlayer());
   }, [currentGenre]);
-  
-  if(isLoading) {
+
+  if (isLoading) {
     return (
       <div className="text-center">
         <CircularProgress color="info" />
@@ -47,19 +47,19 @@ const Discover = () => {
     )
   }
 
-  if(error) {
-    return <Alert severity="error">{error}</Alert>
+  if (error) {
+    return <Alert severity="error">{typeof error === String ? error : 'an error occurred'}</Alert>
   }
 
   return (
     <div className="flex lg:flex-row flex-col justify-between gap-24">
       <div className="flex-[2]">
         <SectionHeader>
-          
+
           <SectionTitle>Discover &nbsp;"{genres.find(genre => genre.value === currentGenre)?.title || currentGenre}"&nbsp; genre</SectionTitle>
           <FormControl>
             <InputLabel id="label">Genre</InputLabel>
-            <Select 
+            <Select
               labelId="label"
               id="select"
               label="Genre"
@@ -76,7 +76,7 @@ const Discover = () => {
             </Select>
           </FormControl>
         </SectionHeader>
-        <Musics 
+        <Musics
           musics={musics}
           isPlaying={isPlaying}
           currentMusic={currentMusic}

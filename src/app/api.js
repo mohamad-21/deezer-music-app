@@ -8,19 +8,19 @@ const deezerApi = createApi({
   }),
   endpoints: (build) => ({
     getSongsByGenre: build.query({
-      query: ({ genre, limited=false }) => `search?q=${genre + (limited ? `&limit=10` : '')}`,
+      query: ({ genre, limited = false }) => `search?q=${genre + (limited ? `&limit=10` : '')}`,
       transformResponse: (response) => response.data
     }),
     getTopCharts: build.query({
-      query: (limit=5) => `chart?limit=${limit}`,
+      query: (limit = 5) => `chart?limit=${limit}`,
       transformResponse: (response) => response.tracks.data
     }),
     getTopArtists: build.query({
-      query: (limit=5) => `chart?limit=${limit}`,
+      query: (limit = 5) => `chart?limit=${limit}`,
       transformResponse: (response) => response.artists.data
     }),
     getArtistById: build.query({
-      query: ({ id, getTopSongs=false }) => `artist/${id + (getTopSongs ? '/top?limit=30' : '')}`
+      query: ({ id, getTopSongs = false }) => `artist/${id + (getTopSongs ? '/top?limit=30' : '')}`
     }),
     searchSong: build.query({
       query: (searchTerm) => `search?q=${searchTerm}`,
