@@ -9,7 +9,10 @@ const deezerApi = createApi({
   endpoints: (build) => ({
     getSongsByGenre: build.query({
       query: ({ genre, limited = false }) => `search?q=${genre + (limited ? `&limit=10` : '')}`,
-      transformResponse: (response) => response.data
+      transformResponse: (response) => {
+        console.log(response);
+        return response.data
+      }
     }),
     getTopCharts: build.query({
       query: (limit = 5) => `chart?limit=${limit}`,

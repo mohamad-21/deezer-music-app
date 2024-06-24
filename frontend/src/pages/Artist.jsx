@@ -12,9 +12,10 @@ const Artist = () => {
   const { id } = useParams();
 
   const { musics, isPlaying, currentMusic, enabledItems } = useSelector(state => state.player);
-  const { data:detectedArtist, isLoading:isLoadingDetectedArtist, error:detectedArtistError } = useGetArtistByIdQuery({ id });
+  const { data: detectedArtist, isLoading: isLoadingDetectedArtist, error: detectedArtistError } = useGetArtistByIdQuery({ id });
   const { data, isLoading, error } = useGetArtistByIdQuery({ id, getTopSongs: true });
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     return () => {
@@ -23,7 +24,7 @@ const Artist = () => {
   }, []);
 
   useEffect(() => {
-    if(data) {
+    if (data) {
       dispatch(setData({ data: data?.data }));
     }
     window.document.title = detectedArtist?.name || 'Artist';
@@ -32,7 +33,7 @@ const Artist = () => {
     });
   }, [id, data]);
 
-  if(isLoading || isLoadingDetectedArtist) {
+  if (isLoading || isLoadingDetectedArtist) {
     return (
       <div className="text-center">
         <CircularProgress color="info" />
@@ -40,11 +41,11 @@ const Artist = () => {
     )
   }
 
-  if(error || detectedArtistError) {
+  if (error || detectedArtistError) {
     return <Alert severity="error">{error || detectedArtistError}</Alert>
   }
 
-  if(!detectedArtist?.id) {
+  if (!detectedArtist?.id) {
     return <Alert severity="error">Artist not found</Alert>
   }
 
@@ -61,7 +62,7 @@ const Artist = () => {
         <SectionTitle>Top {musics?.length} {detectedArtist?.name} Tracks</SectionTitle>
       </div>
       <div>
-        <Musics 
+        <Musics
           musics={musics}
           isPlaying={isPlaying}
           currentMusic={currentMusic}
