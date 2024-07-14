@@ -1,3 +1,3 @@
 export default {
-  base_url: 'http://localhost:3000',
+  base_url: 'https://deezer-proxy-1.onrender.com',
 }
