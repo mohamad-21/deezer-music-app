@@ -10,7 +10,6 @@ const deezerApi = createApi({
     getSongsByGenre: build.query({
       query: ({ genre, limited = false }) => `search?q=${genre + (limited ? `&limit=10` : '')}`,
       transformResponse: (response) => {
-        console.log(response);
         return response.data
       }
     }),
@@ -31,6 +30,7 @@ const deezerApi = createApi({
     })
   })
 });
+
 
 export const { useGetSongsByGenreQuery, useGetTopArtistsQuery, useGetTopChartsQuery, useGetArtistByIdQuery, useSearchSongQuery } = deezerApi;
 

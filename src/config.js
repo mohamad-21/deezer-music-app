@@ -1,3 +1,3 @@
 export default {
-  base_url: 'https://deezer-proxy-1.onrender.com',
+  base_url: 'https://deezer-proxy-m4se.onrender.com',
 }

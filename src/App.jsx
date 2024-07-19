@@ -2,7 +2,7 @@ import { CssBaseline, Link, ThemeProvider } from "@mui/material"
 import { MUITheme } from "./theme";
 import Header from "./components/Header";
 import Player from "./components/player/Player";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Discover from "./pages/Discover";
 import TopCharts from "./pages/TopCharts";
 import TopArtists from "./pages/TopArtists";
@@ -11,14 +11,21 @@ import Saves from "./pages/Saves";
 import Artist from "./pages/Artist";
 import Footer from "./components/Footer";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { loadCurrentMusic } from "./app/features/playerSlice";
-import { useGetArtistByIdQuery } from "./app/api";
+import LoadingBar from "react-top-loading-bar";
 
 function App() {
 
   const { showPlayer, isPlaying, volume, playMode, currentMusic, currentIndex } = useSelector(state => state.player);
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
+  const progressRef = useRef();
+
+  useEffect(() => {
+    progressRef.current.continuousStart();
+    progressRef.current.complete();
+  }, [pathname]);
 
   useEffect(() => {
     if (currentMusic.id) {
@@ -30,6 +37,10 @@ function App() {
     <ThemeProvider theme={MUITheme}>
 
       <CssBaseline />
+      <LoadingBar
+        color='#29b6f6'
+        ref={progressRef}
+      />
 
       <div className={`app text-white `}>
         <div className="text-center py-3 sm:px-12 px-6 text-[13px] bg-zinc-900 text-white leading-6"><Link href="https://developers.deezer.com/api" sx={{ mx: 0.3 }} target="_blank">Deezer</Link> API (genres results showing by search)</div>
