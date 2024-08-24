@@ -2,7 +2,7 @@ import { Grow, ListItemButton, Skeleton } from "@mui/material"
 import PlayPause from './PlayPause';
 import { pause, playTopCharts } from "../app/features/playerSlice";
 
-const ChartCard = ({ id, title, album: { cover_big }, artist: { name }, currentMusic, isPlaying, dispatch, enabledItems, limited = true, isLoading, isTopChartsPlaying }) => {
+const ChartCard = ({ id, title, album: { cover_medium }, artist: { name }, currentMusic, isPlaying, dispatch, enabledItems, limited = true, isLoading, isTopChartsPlaying }) => {
 
   const handleClick = () => {
     if (enabledItems) {
@@ -42,7 +42,7 @@ const ChartCard = ({ id, title, album: { cover_big }, artist: { name }, currentM
           >
             <div className="flex items-center gap-3">
               <img
-                src={cover_big}
+                src={cover_medium}
                 alt={name}
                 className={`${limited ? 'w-[80px] h-[80px]' : 'w-[100px] h-[100px]'} object-cover`}
               />

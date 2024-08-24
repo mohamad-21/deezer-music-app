@@ -7,10 +7,12 @@ import settings from "../settings";
 
 import { pause, playMainTracks } from '../app/features/playerSlice';
 
-const MusicCard = ({ id, title, artist, album, isPlaying, currentMusic, dispatch, preview, removable=false, enabledItems}) => {
+const MusicCard = ({ id, title, artist, album, isPlaying, currentMusic, dispatch, preview, removable = false, enabledItems }) => {
 
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isLiked, setIsLiked] = useState({ id, liked: settings.getLikes().find(music => music.id === id) });
+
+  console.log(album)
   const [isUnliked, setIsUnliked] = useState(false);
 
   const menuClasses = {
@@ -21,8 +23,8 @@ const MusicCard = ({ id, title, artist, album, isPlaying, currentMusic, dispatch
   }
 
   const handleClick = () => {
-    if(enabledItems) {
-      if(currentMusic.id === id && isPlaying) {
+    if (enabledItems) {
+      if (currentMusic.id === id && isPlaying) {
         dispatch(pause());
       } else {
         dispatch(playMainTracks({ id }));
@@ -32,36 +34,36 @@ const MusicCard = ({ id, title, artist, album, isPlaying, currentMusic, dispatch
 
   const handleLike = () => {
     setIsLiked(prev => ({ ...prev, liked: !prev.liked }));
-    settings.toggleLike({id, title, artist, album, preview});
-    if(removable && isLiked.liked) {
+    settings.toggleLike({ id, title, artist, album, preview });
+    if (removable && isLiked.liked) {
       setIsUnliked(true);
     }
   }
 
   return (
-    <Grow style={{transformOrigin: 'top left'}} in={!isUnliked} timeout={isUnliked ? 'auto' : 1000} unmountOnExit >
+    <Grow style={{ transformOrigin: 'top left' }} in={!isUnliked} timeout={isUnliked ? 'auto' : 1000} unmountOnExit >
       <div className="bg-gradient-to-bl from-black/40 via-transparent via-40% to-gray-700 max-w-sm">
         <div className={`relative group`}>
-          <div 
-            className={`absolute inset-0 bg-slate-800/40 backdrop-blur-sm ${currentMusic.id === id ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}  group-hover:opacity-100 group-hover:pointer-events-auto duration-200 flex`} 
+          <div
+            className={`absolute inset-0 bg-slate-800/40 backdrop-blur-sm ${currentMusic.id === id ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}  group-hover:opacity-100 group-hover:pointer-events-auto duration-200 flex`}
             onClick={handleClick}
           >
-            <ListItemButton 
+            <ListItemButton
               style={menuClasses}
               disabled={!enabledItems}
             >
-              <PlayPause 
+              <PlayPause
                 isActiveMusicAndPlaying={currentMusic?.id === id && isPlaying}
               />
             </ListItemButton>
           </div>
           <div className={`flex items-center justify-center ${imageLoaded ? '' : 'h-[200px]'}`}>
-            <img src={album.cover_big} alt={title} onLoad={() => setImageLoaded(true)} className={`${imageLoaded ? 'block' : 'hidden'} w-full h-full object-cover`} />
+            <img src={album.cover_medium} alt={title} onLoad={() => setImageLoaded(true)} className={`${imageLoaded ? 'block' : 'hidden'} w-full h-full object-cover`} />
             <div className={`${imageLoaded ? 'hidden' : 'block'}`}>
-              <CircularProgress color="info"/>
+              <CircularProgress color="info" />
             </div>
           </div>
-          
+
         </div>
         <div className="flex items-center justify-between gap-3 py-4 px-3">
           <div className="flex flex-col gap-0.5 truncate">
