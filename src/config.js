@@ -1,3 +1,3 @@
 export default {
-  base_url: 'https://api.deezer.com',
+  base_url: 'https://proxy.cors.sh/https://api.deezer.com',
 }
