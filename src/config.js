@@ -1,3 +1,3 @@
 export default {
-  base_url: 'https://deezer-proxy-m4se.onrender.com',
+  base_url: 'https://api.deezer.com',
 }
