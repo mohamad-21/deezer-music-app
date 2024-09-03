@@ -4,7 +4,10 @@ import config from '../config';
 const deezerApi = createApi({
   reducerPath: 'deezerApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: config.base_url
+    baseUrl: config.base_url,
+    headers: {
+      'x-cors-api-key': 'temp_f5c6b73636ad26551398b0652bc9d0a0'
+    }
   }),
   endpoints: (build) => ({
     getSongsByGenre: build.query({
